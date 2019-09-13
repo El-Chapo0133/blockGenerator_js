@@ -1,5 +1,7 @@
 const NBWEB = 5
-const NBGEN = 100
+const NBGEN = 47865
+const FIRSTID = 0
+const FIRSTDATA = 0
 
 class WebGeneration {
     constructor() {
@@ -8,24 +10,29 @@ class WebGeneration {
     }
     generateWebsWithGenesis() {
         for (var index = 0; index < NBWEB; index++) {
-            this.listBlock[index] = []
-            this.listBlock[index][0] = this.generateGenesisBlock()
+            this.generateWebs(index)
+            this.initalizeGenesis(index)
         }
+    }
+    generateWebs(index) {
+        this.listBlock[index] = []
+    }
+    initalizeGenesis(index) {
+        this.listBlock[index][0] = this.generateGenesisBlock()
     }
     generateGenesisBlock() {
         var r_block = new Block(null)
-        r_block.data = 100
-        r_block.id = 0
+        r_block.data = FIRSTDATA
+        r_block.id = FIRSTID
         return r_block
     }
     generateNextGen() {
         for (var i = 0; i < NBGEN; i++) {
             for (var index = 0; index < NBWEB; index++) {
                 this.listBlock[index][this.listBlock[index].length] = this.generateBlock(index)
-
-                this.displayResult(this.listBlock[index][this.listBlock[index].length - 1])
             }
         }
+        console.log((NBWEB * NBGEN) + " blocks generated")
     }
     getLastBlock(indexX) {
         return this.listBlock[indexX][this.listBlock[indexX].length - 1]
@@ -33,11 +40,22 @@ class WebGeneration {
     generateBlock(indexX) {
         return new Block(this.getLastBlock(indexX))
     }
-    displayResult(data) {
-        /** TODO :
-         * Display result        
-        var document = document.getElementById("mainContent")
-        document.innerHTML += this.getLastBlock(index).data
-        */
+}
+
+var mainDiv = document.getElementById("mainContent")
+var first_date = new Date()
+var webGeneration = new WebGeneration()
+webGeneration.generateNextGen()
+var finished_date = new Date()
+console.log("time :" + -(first_date - finished_date))
+/*
+for (var indexX = 0; indexX < webGeneration.listBlock[0].length; indexX++) {
+    for (var indexY = 0; indexY < NBWEB; indexY++) {
+        mainDiv.innerHTML += "<div class=\"block\">" + webGeneration.listBlock[indexY][indexX].data + "</div>"
+    }
+}*/
+for (var indexX = 0; indexX < 2; indexX++) {
+    for (var indexY = 0; indexY < NBWEB; indexY++) {
+        mainDiv.innerHTML += "<div class=\"block\">" + webGeneration.listBlock[indexY][indexX].data + "</div>"
     }
 }
